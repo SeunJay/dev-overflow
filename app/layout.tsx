@@ -1,4 +1,12 @@
 import type { Metadata } from "next";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
@@ -16,8 +24,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <>
+            {" "}
+            {/* <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn> */}
+          </>
+          <main className="flex min-h-screen w-full items-center justify-center">
+            {children}
+          </main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
