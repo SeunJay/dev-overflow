@@ -7,7 +7,7 @@ export const QuestionsSchema = z.object({
       message: "Question must contain at least 5 characters",
     })
     .max(130),
-  explanation: z.string().min(100, {
+  explanation: z.string().min(10, {
     message: "Explanation must contain at least 100 characters",
   }),
 

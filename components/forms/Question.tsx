@@ -18,6 +18,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
+import { createQuestion } from "@/lib/actions/question.actions";
 
 const type: any = "create";
 
@@ -40,12 +41,13 @@ const Question = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof QuestionsSchema>) => {
+  const onSubmit = async (values: z.infer<typeof QuestionsSchema>) => {
     setIsSubmitting(true);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
     try {
+      await createQuestion({});
     } catch (error) {
       setIsSubmitting(false);
     } finally {
@@ -132,6 +134,8 @@ const Question = () => {
                   apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   // @ts-ignore
                   onInit={(_evt, editor) => (editorRef.current = editor)}
+                  onEditorChange={(content) => field.onChange(content)}
+                  onBlur={field.onBlur}
                   initialValue=""
                   init={{
                     height: 350,
