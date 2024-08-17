@@ -55,11 +55,8 @@ export async function POST(req: Request) {
   // For this guide, you simply log the payload to the console
 
   if (evt.type === "user.created") {
-    console.log("userId:", evt.data.id);
     const { id, email_addresses, username, image_url, first_name, last_name } =
       evt.data;
-
-    console.log("username ", username);
 
     // TODO: call a server action to create a user in mongodb
     const mongoUser = await createUser({

@@ -20,6 +20,7 @@ import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.actions";
+import console from "console";
 
 const type: any = "create";
 
@@ -32,6 +33,8 @@ const Question = ({ mongoUserId }: QuestionProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathName = usePathname();
+
+  console.log(process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY);
 
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
