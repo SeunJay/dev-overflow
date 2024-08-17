@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     // TODO: call a server action to create a user in mongodb
     const mongoUser = await createUser({
       clerkId: id,
-      name: `${first_name}${last_name ? `${last_name}` : ""}`,
+      name: `${first_name} ${last_name ? `${last_name}` : ""}`,
       username: username || "user",
       email: email_addresses[0].email_address,
       picture: image_url,
