@@ -33,12 +33,6 @@ const Question = ({ mongoUserId }: QuestionProps) => {
   const router = useRouter();
   const pathName = usePathname();
 
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
-
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
@@ -124,7 +118,7 @@ const Question = ({ mongoUserId }: QuestionProps) => {
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500 ">
-                Be specific and imagine you're asking a question to another
+                Be specific and imagine you are asking a question to another
                 person.
               </FormDescription>
               <FormMessage className="text-red-500" />
