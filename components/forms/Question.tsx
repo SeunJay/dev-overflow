@@ -1,4 +1,6 @@
 "use client";
+import React, { useRef, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,7 +15,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
@@ -22,9 +23,15 @@ import { createQuestion } from "@/lib/actions/question.actions";
 
 const type: any = "create";
 
-const Question = () => {
+interface QuestionProps {
+  mongoUserId: string;
+}
+
+const Question = ({ mongoUserId }: QuestionProps) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const pathName = usePathname();
 
   const log = () => {
     if (editorRef.current) {
@@ -43,11 +50,17 @@ const Question = () => {
 
   const onSubmit = async (values: z.infer<typeof QuestionsSchema>) => {
     setIsSubmitting(true);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+
     try {
-      await createQuestion({});
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: mongoUserId,
+        path: pathName,
+      });
+
+      router.push("/");
     } catch (error) {
       setIsSubmitting(false);
     } finally {
