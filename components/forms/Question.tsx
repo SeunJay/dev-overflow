@@ -20,7 +20,6 @@ import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.actions";
-import console from "console";
 
 const type: any = "create";
 
