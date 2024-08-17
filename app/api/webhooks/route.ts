@@ -55,19 +55,19 @@ export async function POST(req: Request) {
   // For this guide, you simply log the payload to the console
   const { id } = evt.data;
   const eventType = evt.type;
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
 
   if (evt.type === "user.created") {
     console.log("userId:", evt.data.id);
     const { id, email_addresses, username, image_url, first_name, last_name } =
       evt.data;
 
+    console.log("username ", username);
+
     // TODO: call a server action to create a user in mongodb
     const mongoUser = await createUser({
       clerkId: id,
       name: `${first_name}${last_name ? `${last_name}` : ""}`,
-      username: username!,
+      username: username || "user",
       email: email_addresses[0].email_address,
       picture: image_url,
     });
