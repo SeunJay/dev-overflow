@@ -5,11 +5,13 @@ import { connectToDatabase } from "./mongoose";
 import {
   CreateUserParams,
   DeleteUserParams,
+  GetAllUsersParams,
+  GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
 import Question from "@/database/question.model";
 
-export async function getUserById(params: any) {
+export async function getUserById(params: GetUserByIdParams) {
   const { userId } = params;
 
   try {
@@ -17,6 +19,19 @@ export async function getUserById(params: any) {
     const user = await User.findOne({ clerkId: userId });
 
     return user;
+  } catch (error: any) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getAllUsers(params: GetAllUsersParams) {
+  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  try {
+    await connectToDatabase();
+    const users = await User.find(params).sort({ createdAt: -1 });
+
+    return { users };
   } catch (error: any) {
     console.log(error);
     throw error;
