@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 
 const Answer = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting] = useState(false);
   const editorRef = useRef(null);
   const { mode } = useTheme();
 

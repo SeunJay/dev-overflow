@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const QuestionDetails = async ({ params }) => {
+const QuestionDetails = async ({ params }: any) => {
   const question = await getQuestionById({
     questionId: params.id,
   });
