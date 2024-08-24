@@ -26,7 +26,7 @@ export async function getUserById(params: GetUserByIdParams) {
 }
 
 export async function getAllUsers(params: GetAllUsersParams) {
-  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  // const { page = 1, pageSize = 20, filter, searchQuery } = params;
   try {
     await connectToDatabase();
     const users = await User.find(params).sort({ createdAt: -1 });
