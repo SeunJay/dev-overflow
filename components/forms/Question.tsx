@@ -20,6 +20,7 @@ import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.actions";
+import { useTheme } from "@/context/ThemeProvider";
 
 const type: any = "create";
 
@@ -29,11 +30,11 @@ interface QuestionProps {
 
 const Question = ({ mongoUserId }: QuestionProps) => {
   const editorRef = useRef(null);
+  const { mode } = useTheme();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathName = usePathname();
-
-  console.log(process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY);
 
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
@@ -172,6 +173,7 @@ const Question = ({ mongoUserId }: QuestionProps) => {
                       "alignright alignjustify | bullist numlist outdent indent | " +
                       "removeformat | help",
                     content_style: "body { font-family:Inter; font-size:14px }",
+                    skin: mode === "dark" ? "oxide-dark" : "oxide",
                   }}
                 />
               </FormControl>

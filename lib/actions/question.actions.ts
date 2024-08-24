@@ -3,7 +3,11 @@
 import Question from "@/database/question.model";
 import { connectToDatabase } from "./mongoose";
 import Tag from "@/database/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import {
+  CreateQuestionParams,
+  GetQuestionByIdParams,
+  GetQuestionsParams,
+} from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 
@@ -26,14 +30,38 @@ export async function getQuestions(params: GetQuestionsParams) {
   }
 }
 
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    await connectToDatabase();
+
+    const question = await Question.findById(params.questionId)
+      .populate({
+        path: "tags",
+        model: Tag,
+        select: "_id name",
+      })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id clerkId name picture",
+      });
+
+    return question;
+  } catch (error: any) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function createQuestion(params: CreateQuestionParams) {
   try {
     await connectToDatabase();
 
     const { title, content, author, tags, path } = params;
-
-    let formattedContent = content.replace("<p>", "");
-    formattedContent = formattedContent.replace("</p>", "");
+    //
+    // let formattedContent = content.replace("<p>", "");
+    // formattedContent = formattedContent.replace("</p>", "");
+    const formattedContent = content;
 
     const question = await Question.create({
       title,
