@@ -3,6 +3,7 @@ import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 import { formatBigNumber, getTimeStamp } from "@/lib/utils";
@@ -43,7 +44,9 @@ const QuestionDetails = async ({ params }: any) => {
             </p>
           </Link>
 
-          <div className="flex justify-end"></div>
+          <div className="flex justify-end">
+            <Votes />
+          </div>
         </div>
 
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
@@ -93,7 +96,7 @@ const QuestionDetails = async ({ params }: any) => {
       </div>
 
       <AllAnswers
-        questionId={JSON.stringify(question._id)}
+        questionId={question._id}
         userId={JSON.stringify(mongoUser._id)}
         totalAnswers={question.answers.length}
       />
