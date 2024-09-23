@@ -1,17 +1,27 @@
 import Answer from "@/components/forms/Answer";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.actions";
+import { getUserById } from "@/lib/actions/user.actions";
 import { formatBigNumber, getTimeStamp } from "@/lib/utils";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const QuestionDetails = async ({ params }: any) => {
+  const { userId: clerKId } = auth();
   const question = await getQuestionById({
     questionId: params.id,
   });
+
+  let mongoUser;
+
+  if (clerKId) {
+    mongoUser = await getUserById({ userId: clerKId });
+  }
   return (
     <>
       <div className="flex-start flex w-full flex-col">
@@ -67,7 +77,9 @@ const QuestionDetails = async ({ params }: any) => {
         />
       </div>
 
-      <ParseHTML data={question.content} />
+      <div className="w-full">
+        <ParseHTML data={question.content} />
+      </div>
 
       <div className="mt-8 flex flex-wrap gap-2">
         {question.tags.map((tag: any) => (
@@ -80,7 +92,17 @@ const QuestionDetails = async ({ params }: any) => {
         ))}
       </div>
 
-      <Answer />
+      <AllAnswers
+        questionId={JSON.stringify(question._id)}
+        userId={JSON.stringify(mongoUser._id)}
+        totalAnswers={question.answers.length}
+      />
+
+      <Answer
+        question={question.content}
+        questionId={JSON.stringify(question._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </>
   );
 };

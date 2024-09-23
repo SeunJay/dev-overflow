@@ -15,9 +15,18 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.actions";
+import { usePathname } from "next/navigation";
 
-const Answer = () => {
-  const [isSubmitting] = useState(false);
+interface IAnswerProps {
+  question: string;
+  questionId: string;
+  authorId: string;
+}
+
+const Answer = ({ question, questionId, authorId }: IAnswerProps) => {
+  const pathName = usePathname();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const { mode } = useTheme();
 
@@ -28,10 +37,32 @@ const Answer = () => {
     },
   });
 
-  const handleCreateAnswer = () => {};
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    setIsSubmitting(true);
+
+    try {
+      await createAnswer({
+        content: values.answer,
+        question: JSON.parse(questionId),
+        author: JSON.parse(authorId),
+        path: pathName,
+      });
+
+      form.reset();
+
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+
+        editor.setContent("");
+      }
+    } catch (error) {
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="">
-      <div className="flex flex-col mt-4 justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+      <div className="mt-4 flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </h4>
