@@ -2,11 +2,7 @@
 
 import Answer from "@/database/answer.model";
 import { connectToDatabase } from "./mongoose";
-import {
-  CreateAnswerParams,
-  GetAnswersParams,
-  GetAnswersParams,
-} from "./shared.types";
+import { CreateAnswerParams, GetAnswersParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
 
