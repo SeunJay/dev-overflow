@@ -23,6 +23,7 @@ const QuestionDetails = async ({ params }: any) => {
   if (clerKId) {
     mongoUser = await getUserById({ userId: clerKId });
   }
+
   return (
     <>
       <div className="flex-start flex w-full flex-col">
@@ -45,7 +46,16 @@ const QuestionDetails = async ({ params }: any) => {
           </Link>
 
           <div className="flex justify-end">
-            <Votes />
+            <Votes
+              type="question"
+              itemId={JSON.stringify(question._id)}
+              userId={JSON.stringify(mongoUser?._id)}
+              upvotes={question.upvotes?.length}
+              downvotes={question.downvotes?.length}
+              hasupVoted={question.upvotes?.includes(mongoUser?._id)}
+              hasdownVoted={question.downvotes?.includes(mongoUser?._id)}
+              hasSaved={mongoUser?.saved.includes(question._id)}
+            />
           </div>
         </div>
 
@@ -97,14 +107,14 @@ const QuestionDetails = async ({ params }: any) => {
 
       <AllAnswers
         questionId={question._id}
-        userId={JSON.stringify(mongoUser._id)}
+        userId={JSON.stringify(mongoUser?._id)}
         totalAnswers={question.answers.length}
       />
 
       <Answer
         question={question.content}
         questionId={JSON.stringify(question._id)}
-        authorId={JSON.stringify(mongoUser._id)}
+        authorId={JSON.stringify(mongoUser?._id)}
       />
     </>
   );

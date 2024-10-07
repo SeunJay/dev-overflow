@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ["mongoose"],
+  // serverExternalPackages: ["mongoose"],
   experimental: {
     //   serverComponentsExternalPackages: ["mongoose"],
     mdxRs: true,
