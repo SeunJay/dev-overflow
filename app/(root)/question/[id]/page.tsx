@@ -14,7 +14,7 @@ import React from "react";
 
 const QuestionDetails = async (props: any) => {
   const params = await props.params;
-  const { userId: clerKId } = auth();
+  const { userId: clerKId } = await auth();
   const question = await getQuestionById({
     questionId: params.id,
   });
