@@ -12,7 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const QuestionDetails = async ({ params }: any) => {
+const QuestionDetails = async (props: any) => {
+  const params = await props.params;
   const { userId: clerKId } = auth();
   const question = await getQuestionById({
     questionId: params.id,

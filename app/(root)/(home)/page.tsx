@@ -8,7 +8,14 @@ import { HomePageFilters } from "@/constants/filters";
 import { getQuestions } from "@/lib/actions/question.actions";
 import Link from "next/link";
 
-export default async function Home() {
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+export default async function Home({ searchParams }: SearchParams) {
+  const queryParams = await searchParams;
+  console.log(queryParams);
+
   const { questions } = await getQuestions({});
   return (
     <>
