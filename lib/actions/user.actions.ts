@@ -7,6 +7,7 @@ import {
   DeleteUserParams,
   GetAllUsersParams,
   GetUserByIdParams,
+  ToggleSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
 import Question from "@/database/question.model";
@@ -106,6 +107,44 @@ export async function deleteUser(params: DeleteUserParams) {
     const deletedUser = await User.findByIdAndDelete(user._id);
 
     return deletedUser;
+  } catch (error: any) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function toggleSavedQuestion(params: ToggleSaveQuestionParams) {
+  const { userId, questionId, path } = params;
+  try {
+    await connectToDatabase();
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isQuestioned = user.saved.includes(questionId);
+
+    if (isQuestioned) {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: { saved: questionId },
+        },
+        { new: true }
+      );
+    } else {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $addToSet: { saved: questionId },
+        },
+        { new: true }
+      );
+    }
+
+    revalidatePath(path);
   } catch (error: any) {
     console.log(error);
     throw error;

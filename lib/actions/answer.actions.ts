@@ -2,7 +2,11 @@
 
 import Answer from "@/database/answer.model";
 import { connectToDatabase } from "./mongoose";
-import { CreateAnswerParams, GetAnswersParams } from "./shared.types";
+import {
+  AnswerVoteParams,
+  CreateAnswerParams,
+  GetAnswersParams,
+} from "./shared.types";
 import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
 
@@ -43,6 +47,82 @@ export async function getAnswers(params: GetAnswersParams) {
       answers,
     };
   } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function upvoteAnswer(params: AnswerVoteParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, answerId, hasdownVoted, hasupVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasupVoted) {
+      updateQuery = {
+        $pull: { upVotes: userId },
+      };
+    } else if (hasdownVoted) {
+      updateQuery = {
+        $pull: { downVotes: userId },
+        $push: { upVotes: userId },
+      };
+    } else {
+      updateQuery = {
+        $addToSet: { upVotes: userId },
+      };
+    }
+
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    });
+
+    if (!answer) throw new Error("Answer not found");
+
+    // Increment author's reputation by +10 for upvoting a question
+
+    revalidatePath(path);
+  } catch (error: any) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downvoteAnswer(params: AnswerVoteParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, answerId, hasdownVoted, hasupVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasdownVoted) {
+      updateQuery = {
+        $pull: { downVotes: userId },
+      };
+    } else if (hasupVoted) {
+      updateQuery = {
+        $pull: { upVotes: userId },
+        $push: { downVotes: userId },
+      };
+    } else {
+      updateQuery = {
+        $addToSet: { downVotes: userId },
+      };
+    }
+
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    });
+
+    if (!answer) throw new Error("Answer not found");
+
+    // Increment author's reputation by +10 for upvoting a question
+
+    revalidatePath(path);
+  } catch (error: any) {
     console.log(error);
     throw error;
   }

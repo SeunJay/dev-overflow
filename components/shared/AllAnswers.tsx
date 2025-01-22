@@ -6,6 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getTimeStamp } from "@/lib/utils";
 import ParseHTML from "./ParseHTML";
+import Votes from "./Votes";
+// import mongoose from "mongoose";
 
 interface Props {
   questionId: string;
@@ -25,11 +27,14 @@ const AllAnswers = async ({
   const response = await getAnswers({
     questionId,
   });
+
   // console.log(response.answers[0]);
+  // console.log(userId);
+
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
-        <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
+        <h3 className="primary-text-gradient">{totalAnswers} Answer(s)</h3>
 
         <Filter filters={AnswerFilters} />
       </div>
@@ -62,7 +67,21 @@ const AllAnswers = async ({
                   </div>
                 </Link>
 
-                <div className="flex justify-end">VOTING</div>
+                <div className="flex justify-end">
+                  <Votes
+                    type="Answer"
+                    itemId={JSON.stringify(answer._id)}
+                    userId={userId}
+                    upvotes={answer.upVotes?.length}
+                    downvotes={answer.downVotes?.length}
+                    hasupVoted={answer.upVotes
+                      ?.map((vote: any) => JSON.stringify(vote))
+                      .includes(userId)}
+                    hasdownVoted={answer.downVotes
+                      ?.map((vote: any) => JSON.stringify(vote))
+                      .includes(userId)}
+                  />
+                </div>
               </div>
             </div>
             <ParseHTML data={answer.content} />

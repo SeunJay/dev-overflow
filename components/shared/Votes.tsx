@@ -1,7 +1,14 @@
 "use client";
 
+import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.actions";
+import {
+  downvoteQuestion,
+  upvoteQuestion,
+} from "@/lib/actions/question.actions";
+import { toggleSavedQuestion } from "@/lib/actions/user.actions";
 import { formatBigNumber } from "@/lib/utils";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface VotesProps {
@@ -25,8 +32,62 @@ const Votes = ({
   hasupVoted,
   hasSaved,
 }: VotesProps) => {
-  const handleSave = () => {};
-  const handleVote = (action: string) => {};
+  const pathName = usePathname();
+
+  const handleSave = async () => {
+    await toggleSavedQuestion({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathName,
+    });
+  };
+  const handleVote = async (action: string) => {
+    if (!userId) return;
+
+    if (action === "upvote") {
+      if (type === "Question") {
+        await upvoteQuestion({
+          userId: JSON.parse(userId),
+          questionId: JSON.parse(itemId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathName,
+        });
+      } else if (type === "Answer") {
+        await upvoteAnswer({
+          userId: JSON.parse(userId),
+          answerId: JSON.parse(itemId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathName,
+        });
+      }
+
+      // todo: show a toast message
+    }
+
+    if (action === "downvote") {
+      if (type === "Question") {
+        await downvoteQuestion({
+          userId: JSON.parse(userId),
+          questionId: JSON.parse(itemId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathName,
+        });
+      } else if (type === "Answer") {
+        await downvoteAnswer({
+          userId: JSON.parse(userId),
+          answerId: JSON.parse(itemId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathName,
+        });
+      }
+
+      // todo: show a toast message
+    }
+  };
   return (
     <div className="flex gap-5">
       <div className="flex-center gap-2.5">
@@ -72,19 +133,20 @@ const Votes = ({
           </div>
         </div>
       </div>
-
-      <Image
-        src={
-          hasSaved
-            ? "/assets/icons/star-filled.svg"
-            : "/assets/icons/star-red.svg"
-        }
-        width={18}
-        height={18}
-        alt="star"
-        className="cursor-pointer"
-        onClick={handleSave}
-      />
+      {type === "Question" && (
+        <Image
+          src={
+            hasSaved
+              ? "/assets/icons/star-filled.svg"
+              : "/assets/icons/star-red.svg"
+          }
+          width={18}
+          height={18}
+          alt="star"
+          className="cursor-pointer"
+          onClick={handleSave}
+        />
+      )}
     </div>
   );
 };

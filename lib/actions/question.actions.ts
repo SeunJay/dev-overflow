@@ -121,16 +121,16 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
 
     if (hasupVoted) {
       updateQuery = {
-        $pull: { upvotes: userId },
+        $pull: { upVotes: userId },
       };
     } else if (hasdownVoted) {
       updateQuery = {
-        $pull: { downvotes: userId },
-        $push: { upvotes: userId },
+        $pull: { downVotes: userId },
+        $push: { upVotes: userId },
       };
     } else {
       updateQuery = {
-        $addToSet: { upvotes: userId },
+        $addToSet: { upVotes: userId },
       };
     }
 
@@ -159,16 +159,16 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
 
     if (hasdownVoted) {
       updateQuery = {
-        $pull: { downvotes: userId },
+        $pull: { downVotes: userId },
       };
     } else if (hasupVoted) {
       updateQuery = {
-        $pull: { upvotes: userId },
-        $push: { downvotes: userId },
+        $pull: { upVotes: userId },
+        $push: { downVotes: userId },
       };
     } else {
       updateQuery = {
-        $addToSet: { downvotes: userId },
+        $addToSet: { downVotes: userId },
       };
     }
 
