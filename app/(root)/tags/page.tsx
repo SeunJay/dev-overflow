@@ -5,8 +5,14 @@ import { UserFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.actions";
 import Link from "next/link";
 
-const Tags = async () => {
-  const { tags } = await getAllTags({});
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+const Tags = async ({ searchParams }: SearchParams) => {
+  const queryParams = await searchParams;
+
+  const { tags } = await getAllTags({ searchQuery: queryParams.query });
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">

@@ -5,12 +5,27 @@ import Tag from "@/database/tag.model";
 import { connectToDatabase } from "./mongoose";
 import { GetAllTagsParams, GetTopInteractedTagsParams } from "./shared.types";
 import User from "@/database/user.model";
+import { FilterQuery } from "mongoose";
 
 export async function getAllTags(params: GetAllTagsParams) {
-  // const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+
+  const query: FilterQuery<typeof Tag> = {};
+
+  if (searchQuery) {
+    query.$or = [
+      {
+        name: { $regex: new RegExp(searchQuery, "i") },
+      },
+      {
+        description: { $regex: new RegExp(searchQuery, "i") },
+      },
+    ];
+  }
+
   try {
     await connectToDatabase();
-    const tags = await Tag.find(params).sort({ createdAt: -1 });
+    const tags = await Tag.find(query).sort({ createdAt: -1 });
 
     return { tags };
   } catch (error: any) {

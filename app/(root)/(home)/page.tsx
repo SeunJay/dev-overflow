@@ -14,9 +14,11 @@ interface SearchParams {
 
 export default async function Home({ searchParams }: SearchParams) {
   const queryParams = await searchParams;
-  console.log(queryParams);
 
-  const { questions } = await getQuestions({});
+  const { questions } = await getQuestions({
+    searchQuery: queryParams.query,
+  });
+
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">

@@ -10,6 +10,7 @@ import {
   UpdateUserParams,
 } from "./shared.types";
 import Question from "@/database/question.model";
+import { FilterQuery } from "mongoose";
 
 export async function getUserById(params: GetUserByIdParams) {
   const { userId } = params;
@@ -26,10 +27,24 @@ export async function getUserById(params: GetUserByIdParams) {
 }
 
 export async function getAllUsers(params: GetAllUsersParams) {
-  // const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+
+  const query: FilterQuery<typeof User> = {};
+
+  if (searchQuery) {
+    query.$or = [
+      {
+        name: { $regex: new RegExp(searchQuery, "i") },
+      },
+      {
+        username: { $regex: new RegExp(searchQuery, "i") },
+      },
+    ];
+  }
+
   try {
     await connectToDatabase();
-    const users = await User.find(params).sort({ createdAt: -1 });
+    const users = await User.find(query).sort({ createdAt: -1 });
 
     return { users };
   } catch (error: any) {

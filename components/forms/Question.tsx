@@ -205,7 +205,7 @@ const Question = ({ mongoUserId }: QuestionProps) => {
 
                   {field.value.length > 0 && (
                     <div className="flex-start mt-2.5 gap-2.5">
-                      {field.value.map((tag: any) => (
+                      {field.value.map((tag: any, i) => (
                         <Badge
                           key={tag}
                           className="subtle-medium background-light800_dark300 text-light400_dark500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"

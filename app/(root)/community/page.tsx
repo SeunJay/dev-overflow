@@ -5,8 +5,17 @@ import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.actions";
 import Link from "next/link";
 
-const Community = async () => {
-  const { users } = await getAllUsers({});
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+const Community = async ({ searchParams }: SearchParams) => {
+  const queryParams = await searchParams;
+
+  const { users } = await getAllUsers({
+    searchQuery: queryParams.query,
+  });
+
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
