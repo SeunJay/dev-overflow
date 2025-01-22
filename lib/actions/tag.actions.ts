@@ -8,7 +8,7 @@ import User from "@/database/user.model";
 import { FilterQuery } from "mongoose";
 
 export async function getAllTags(params: GetAllTagsParams) {
-  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  const { searchQuery } = params;
 
   const query: FilterQuery<typeof Tag> = {};
 

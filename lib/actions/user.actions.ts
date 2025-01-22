@@ -27,7 +27,7 @@ export async function getUserById(params: GetUserByIdParams) {
 }
 
 export async function getAllUsers(params: GetAllUsersParams) {
-  const { page = 1, pageSize = 20, filter, searchQuery } = params;
+  const { searchQuery } = params;
 
   const query: FilterQuery<typeof User> = {};
 
