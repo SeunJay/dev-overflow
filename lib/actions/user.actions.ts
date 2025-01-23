@@ -193,7 +193,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       throw new Error("User not found!");
     }
 
-    const savedQuestions = user.saved;
+    const savedQuestions = user.saved as any[];
 
     return {
       questions: savedQuestions,
