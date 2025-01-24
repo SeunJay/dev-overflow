@@ -62,6 +62,7 @@ export default async function Home({ searchParams }: SearchParams) {
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}
+              tagRoutePrefix="tags"
             />
           ))
         ) : (

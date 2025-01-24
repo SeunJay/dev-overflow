@@ -20,6 +20,7 @@ interface QuestionProps {
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  tagRoutePrefix?: string;
 }
 
 const QuestionCard = ({
@@ -31,6 +32,7 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  tagRoutePrefix,
 }: QuestionProps) => {
   return (
     <div className="card-wrapper rounded-[18px] p-9 sm:px-11">
@@ -50,7 +52,12 @@ const QuestionCard = ({
 
       <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <RenderTag key={tag._id} id={tag._id} name={tag.name} />
+          <RenderTag
+            key={tag._id}
+            id={tag._id}
+            name={tag.name}
+            tagRoutePrefix={tagRoutePrefix || "tags"}
+          />
         ))}
       </div>
 
