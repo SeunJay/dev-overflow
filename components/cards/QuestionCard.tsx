@@ -20,6 +20,7 @@ interface QuestionProps {
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  clerkId?: string;
   tagRoutePrefix?: string;
 }
 
@@ -32,6 +33,7 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  clerkId,
   tagRoutePrefix,
 }: QuestionProps) => {
   return (

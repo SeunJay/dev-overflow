@@ -38,13 +38,36 @@ export const getTimeStamp = (date: Date): string => {
 };
 
 export const formatBigNumber = (num: number): string => {
-  if (num >= 1_000_000) {
-    const formattedNum = num / 1_000_000;
+  // if (num >= 1_000_000) {
+  //   const formattedNum = num / 1_000_000;
+  //   return `${formattedNum}M`;
+  // } else if (num >= 1_000) {
+  //   const formattedNum = num / 1_000;
+  //   return `${formattedNum}K`;
+  // } else {
+  //   return num.toString();
+  // }
+  if (num >= 1000000) {
+    const formattedNum = (num / 1000000).toFixed(1);
     return `${formattedNum}M`;
-  } else if (num >= 1_000) {
-    const formattedNum = num / 1_000;
+  } else if (num >= 1000) {
+    const formattedNum = (num / 1000).toFixed(1);
     return `${formattedNum}K`;
   } else {
     return num.toString();
   }
+};
+
+export const getMonthAndYear = (date: Date): string => {
+  // Check if the provided parameter is a valid Date object
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid Date object provided");
+  }
+
+  // Get the month and year
+  const month = date.toLocaleString("default", { month: "long" }); // Full month name
+  const year = date.getFullYear();
+
+  // Return the joined month and year
+  return `${month} ${year}`;
 };
