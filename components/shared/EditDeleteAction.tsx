@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
