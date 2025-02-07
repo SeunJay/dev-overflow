@@ -1,16 +1,12 @@
 import Profile from "@/components/forms/Profile";
-import { getQuestionById } from "@/lib/actions/question.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 
-interface Params {
-  params: Promise<{ [key: string]: string }>;
-}
 
-const EditQuestion = async ({ params }: Params) => {
-  const { id } = await params;
+
+const EditProfile = async () => {
   const { userId } = await auth();
 
   if (!userId) redirect("/sign-in");
@@ -27,4 +23,4 @@ const EditQuestion = async ({ params }: Params) => {
   );
 };
 
-export default EditQuestion;
+export default EditProfile;
